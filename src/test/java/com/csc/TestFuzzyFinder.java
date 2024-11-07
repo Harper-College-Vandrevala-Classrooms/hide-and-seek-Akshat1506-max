@@ -1,32 +1,36 @@
 package com.csc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestFuzzyFinder {
 
-  FuzzyFinder finder;
-  FuzzyListGenerator generator;
+    FuzzyFinder finder;
+    FuzzyListGenerator generator;
 
-  @BeforeEach
-  void setUp() {
-    finder = new FuzzyFinder();
-    generator = new FuzzyListGenerator();
-  }
+    @BeforeEach
+    void setUp() {
+        finder = new FuzzyFinder();
+        generator = new FuzzyListGenerator();
+    }
 
-  @Test
-  void exampleFailingTestWithRandomizedFuzzies() {
-    ArrayList<Fuzzy> fuzzies = generator.randomizedRainbowFuzzies();
-    assertEquals("purple", fuzzies.getFirst().color);
-  }
+    @Test
+    void testLinearSearchForGolden() {
+        List<Fuzzy> fuzzies = generator.randomizedRainbowFuzzies();
+        int index = finder.linearSearchForGolden(fuzzies);
+        assertTrue(index >= 0, "Golden fuzzy not found in randomized list using linear search");
+        assertEquals("gold", fuzzies.get(index).color);
+    }
 
-  @Test
-  void exampleFailingTestWithSortedFuzzies() {
-    ArrayList<Fuzzy> fuzzies = generator.sortedRainbowFuzzies();
-    assertEquals("purple", fuzzies.getFirst().color);
-  }
+    @Test
+    void testBinarySearchForGolden() {
+        List<Fuzzy> fuzzies = generator.sortedRainbowFuzzies();
+        int index = finder.binarySearchForGolden(fuzzies);
+        assertTrue(index >= 0, "Golden fuzzy not found in sorted list using binary search");
+        assertEquals("gold", fuzzies.get(index).color);
+    }
 }
